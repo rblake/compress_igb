@@ -15,7 +15,7 @@ extern const uint32_t exponenttable[64];
 
 typedef uint16_t short_float;
 
-inline short_float shortFromFloat(const float external_ff) {
+static inline short_float shortFromFloat(const float external_ff) {
   union {
     float ff;
     uint32_t f;
@@ -24,7 +24,7 @@ inline short_float shortFromFloat(const float external_ff) {
   return basetable[(c.f>>23)&0x1ff]+((c.f&0x007fffff)>>shifttable[(c.f>>23)&0x1ff]);
 }
 
-inline float floatFromShort(const short_float h) {
+static inline float floatFromShort(const short_float h) {
   union {
     float ff;
     uint32_t f;
