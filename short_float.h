@@ -5,7 +5,20 @@
 #define __SHORT_FLOAT_H__
 //// HEADER GUARD ///////////////////////////
 
+/*
+ftp://ftp.fox-toolkit.org/pub/fasthalffloatconversion.pdf
+
+Fast Half Float Conversions
+Jeroen van der Zijp
+November 2008
+(Revised September 2010)
+
+Use the dumpTables code to generate the corresponding C file.
+*/
+
+
 #include <stdint.h>
+
 
 extern const uint16_t basetable[512];
 extern const uint16_t shifttable[512];
