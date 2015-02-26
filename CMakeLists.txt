@@ -10,3 +10,6 @@ add_executable(dumpTables dumpTables.c)
 
 add_executable(igbzip igbzip.c)
 target_link_libraries(igbzip short_float z)
+
+add_executable(igbunzip igbunzip.c)
+target_link_libraries(igbunzip short_float z)
