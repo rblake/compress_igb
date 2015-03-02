@@ -30,21 +30,23 @@ typedef uint16_t short_float;
 
 static inline short_float shortFromFloat(const float external_ff) {
   union {
-    float ff;
-    uint32_t f;
+    float as_float;
+    uint32_t as_uint32;
   } c;
-  c.ff = external_ff;
-  return basetable[(c.f>>23)&0x1ff]+((c.f&0x007fffff)>>shifttable[(c.f>>23)&0x1ff]);
+  c.as_float = external_ff;
+  return basetable[(c.as_uint32>>23)&0x1ff]+((c.as_uint32&0x007fffff)>>shifttable[(c.as_uint32>>23)&0x1ff]);
 }
 
 static inline float floatFromShort(const short_float h) {
   union {
-    float ff;
-    uint32_t f;
+    float as_float;
+    uint32_t as_uint32;
   } c;
-  c.f = mantissatable[offsettable[h>>10]+(h&0x3ff)]+exponenttable[h>>10];
-  return c.ff;
+  c.as_uint32 = mantissatable[offsettable[h>>10]+(h&0x3ff)]+exponenttable[h>>10];
+  return c.as_float;
 }
+
+#define SHORT_FLOAT_MACHINE_EPS 0.0009765625
 
 //// HEADER GUARD ///////////////////////////
 #endif
