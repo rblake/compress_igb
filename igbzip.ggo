@@ -1,0 +1,20 @@
+package "igbzip"
+version "1.0"
+purpose "Compress IGB files into ZGB files."
+description "This program will compress an IGB file into a ZGB file.  
+
+ZGB files lose the least significant digits from an igb file in order
+to take less space.  They are appropriate when
+- You are outputting an IGB file for visualization purposes
+- You are backing up a study for cold storage
+
+A ZGB file is NOT appropriate when
+- You need to compute numerical derivatives (dv/dt, gradients, conduction velocity) using this IGB as input.
+
+"
+
+args "--unamed-opts"
+
+option "force" f "Overwrite the output file" flag off
+option "recursive" r "Descend recursively into directories" flag off
+option "precision" p "Specify the minimum precision for the IGB file.  Default is 0.1 for *vm.igb[.gz] files" typestr="float" optional

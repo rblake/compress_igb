@@ -1,8 +1,15 @@
 #include <zlib.h>
+#include <stdlib.h>
+#include "igbzip.opts.h"
 #include "short_float.h"
 
 int main (int argc, char* argv[])
 {
+  struct gengetopt_args_info params;
+
+  if ( cmdline_parser(argc, argv, &params) != 0 )
+    exit(1);
+
   gzFile file;
   file = gzopen(argv[1], "r");
   gzFile outfile;

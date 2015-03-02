@@ -1,0 +1,9 @@
+package "igbunzip"
+version "1.0"
+purpose "Uncompress ZGB files into IGB files."
+description "This program will uncompress a ZGB file into an IGB file."
+
+args "--unamed-opts"
+
+option "force" f "Overwrite the output file" flag off
+option "recursive" r "Descend recursively into directories" flag off
