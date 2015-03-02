@@ -1,4 +1,4 @@
-#include <zlib.h>
+#include <bzlib.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "igbunzip.opts.h"
@@ -11,23 +11,29 @@ int main (int argc, char* argv[])
   if ( cmdline_parser(argc, argv, &params) != 0 )
     exit(1);
 
-  gzFile file;
-  file = gzopen(argv[1], "r");
+  FILE* file = fopen(argv[1], "r");
+  int bzerror;
+  BZFILE *bz_file = BZ2_bzReadOpen( 
+     &bzerror, 
+     file, 
+     0, //verbosity, [0,4]
+     0, // small, boolean
+     NULL, 0);
   FILE* outfile;
   outfile = fopen("out.blah.igb", "w");
 
   char header[1024];
-  gzread(file, header, 1024);
+  fread(header, sizeof(char), 1024, file);
   fwrite(header, sizeof(char), 1024, outfile);
   
   short_float half;
-  while (gzread(file, &half, sizeof(half)) == sizeof(half)) {
+  while (BZ2_bzRead(&bzerror, bz_file, &half, sizeof(half)) == sizeof(half)) {
     float ff = floatFromShort(half);
     fwrite(&ff, sizeof(ff), 1, outfile);
   }
-  
 
-  gzclose(file);
+  BZ2_bzReadClose(&bzerror, bz_file);
+  fclose(file);
   fclose(outfile);
 
 

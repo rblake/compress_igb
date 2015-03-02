@@ -22,8 +22,8 @@ add_executable(dumpTables dumpTables.c)
 
 gengetopt_rule(igbzip.opts igbzip.ggo)
 add_executable(igbzip igbzip.c igbzip.opts.c)
-target_link_libraries(igbzip short_float z)
+target_link_libraries(igbzip short_float z bz2)
 
 gengetopt_rule(igbunzip.opts igbunzip.ggo)
 add_executable(igbunzip igbunzip.c igbunzip.opts.c)
-target_link_libraries(igbunzip short_float z)
+target_link_libraries(igbunzip short_float bz2)
