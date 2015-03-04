@@ -22,6 +22,10 @@ bool compressFile(const path infilename, const path outfilename, const bool forc
     perror(("Can't open " + infilename.string() + " for reading").c_str());
     return false;
   }  
+  if (!force && exists(outfilename)) {
+    cerr << "File " << outfilename << " already exists, not overwriting.  Override with -f\n";
+    goto clean_up_infile;
+  }
   FILE* outfile = fopen(outfilename.string().c_str(), "w");
   if (outfile == NULL) {
     perror(("Can't open " + outfilename.string() + " for writing").c_str());
