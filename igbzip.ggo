@@ -4,17 +4,31 @@ purpose "Compress IGB files into ZGB files."
 description "This program will compress an IGB file into a ZGB file.  
 
 ZGB files lose the least significant digits from an igb file in order
-to take less space.  They are appropriate when
+to take less space.  On average they are only accurate to 3 decimal
+places, unlike a regular IGB file which is accurate to 7 decimal
+places.  They are appropriate when
 - You are outputting an IGB file for visualization purposes
 - You are backing up a study for cold storage
 
 A ZGB file is NOT appropriate when
 - You need to compute numerical derivatives (dv/dt, gradients, conduction velocity) using this IGB as input.
-
+- You need numbers larger than 1e12 or smaller than 1e-12
 "
 
 args "--unamed-opts"
 
 option "force" f "Overwrite the output file" flag off
 option "recursive" r "Descend recursively into directories" flag off
-option "precision" p "Specify the minimum precision for the IGB file.  Default is 0.1 for *vm.igb[.gz] files" typestr="float" optional
+option "round-to-nearest" n "Round all values to nearest multiple of this value.  For example, if 1 \
+is used, all stored values will be integers.  If 0.1 is used, all \
+stored values will be multiples of 0.1.  If 0 is used, the option is \
+disabled.\n\n\
+\
+Increasing this value will make your ZGB files smaller, but makes the \
+IGB output grainier.  If set to 10 for a Vm IGB file, for example, all \
+voltages will be rounded to the nearest 10 mV increment.  Take care to \
+choose a value that preserves your visualization needs.\n\n\
+\
+Default is 0.1 for *vm.igb[.gz] files, and 0 (disabled) otherwise." float optional
+
+
