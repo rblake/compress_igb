@@ -17,7 +17,7 @@ Use the dumpTables code to generate the corresponding C file.
 */
 
 
-#include <stdint.h>
+#include <cstdint>
 
 
 extern const uint16_t basetable[512];

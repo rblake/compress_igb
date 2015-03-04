@@ -1,6 +1,6 @@
 
-#include <stdint.h>
-#include <stdio.h>
+#include <cstdint>
+#include <cstdio>
 
 uint16_t basetable[512];
 uint8_t shifttable[512];
@@ -68,7 +68,7 @@ uint32_t convertmantissa(unsigned int i){
   // Return combined number
 }
 
-void main(void) {
+int main(void) {
   generatetables();
   
   for (int i=0; i<64; i++) {

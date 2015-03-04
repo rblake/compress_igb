@@ -13,17 +13,18 @@ function(gengetopt_rule target source)
   )
 endfunction(gengetopt_rule)
 
-add_definitions(-std=c99)
+list(APPEND CMAKE_CXX_FLAGS -std=c++11)
+list(APPEND CMAKE_C_FLAGS -std=c99)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-add_library(short_float short_float.c short_float.h)
+add_library(short_float short_float.cc short_float.h)
 
-add_executable(dumpTables dumpTables.c)
+add_executable(dumpTables dumpTables.cc)
 
 gengetopt_rule(igbzip.opts igbzip.ggo)
-add_executable(igbzip igbzip.c igbzip.opts.c)
+add_executable(igbzip igbzip.cc igbzip.opts.c)
 target_link_libraries(igbzip short_float z bz2)
 
 gengetopt_rule(igbunzip.opts igbunzip.ggo)
-add_executable(igbunzip igbunzip.c igbunzip.opts.c)
+add_executable(igbunzip igbunzip.cc igbunzip.opts.c)
 target_link_libraries(igbunzip short_float bz2)

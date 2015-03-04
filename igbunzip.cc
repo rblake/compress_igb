@@ -1,6 +1,6 @@
 #include <bzlib.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 #include "igbunzip.opts.h"
 #include "short_float.h"
 
