@@ -84,8 +84,8 @@ int main(void) {
   for (int i=1; i<=30; i++) {
     exponenttable[i] = i<<23;
   }
-  for (int i=33; i<=62; i++) {
-    exponenttable[i] = 0x80000000 + (i-32)<<23;
+  for (unsigned int i=33; i<=62; i++) {
+    exponenttable[i] = 0x80000000 | ((i-32)<<23);
   }
 
   mantissatable[0] = 0;
