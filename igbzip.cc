@@ -15,6 +15,7 @@ using namespace boost::filesystem;
 bool compressFile(const path infilename, const path outfilename, const bool force, const float roundFactor) {
   bool didEverythingGoOk = false;
   BZFILE* bz_outfile;
+  FILE* outfile;
 
   gzFile file;
   file = gzopen(infilename.string().c_str(), "r");
@@ -26,7 +27,7 @@ bool compressFile(const path infilename, const path outfilename, const bool forc
     cerr << "File " << outfilename << " already exists, not overwriting.  Override with -f\n";
     goto clean_up_infile;
   }
-  FILE* outfile = fopen(outfilename.string().c_str(), "w");
+  outfile = fopen(outfilename.string().c_str(), "w");
   if (outfile == NULL) {
     perror(("Can't open " + outfilename.string() + " for writing").c_str());
     goto clean_up_infile;
