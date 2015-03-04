@@ -77,7 +77,9 @@ bool uncompressFile(const path infilename, const path outfilename) {
  clean_up_outfile:
   fclose(outfile);
   //delete the outfile.
-  remove(outfilename);
+  if (!didEverythingGoOk) {
+    remove(outfilename);
+  }
  clean_up_bzfile:
   BZ2_bzReadClose(&bzerror, bz_file);
  clean_up_infile:
