@@ -97,13 +97,31 @@ bool uncompressFile(const path infilename, const path outfilename, const bool fo
 
 }
 
-bool checkZGBFile(const path infilename, path& outfilename) {
+bool checkInputFile(const path infilename, path& outfilename) {
   if (infilename.extension() == ".zgb") {
     outfilename = infilename;
     outfilename.replace_extension("igb");
     return true;
   }
   return false;
+}
+
+void processPath(const path infilename, const bool warnWrongType, const struct gengetopt_args_info& params) {
+  if (params.recursive_flag && is_directory(infilename)) {
+    for (directory_iterator diter(infilename); diter != directory_iterator(); diter++) {
+      processPath(diter->path(), false, params);
+    }
+  } else {
+    path outfilename;
+    //if infilename doesn't match the pattern
+    if (!checkInputFile(infilename, outfilename)) {
+      if (warnWrongType) {
+        cerr << "Skipping non-ZGB file " << infilename << "\n";
+      }
+      return;
+    }
+    uncompressFile(infilename, outfilename, params.force_flag);
+  }
 }
 
 int main (int argc, char* argv[])
@@ -119,19 +137,8 @@ int main (int argc, char* argv[])
     return 1;
   }
 
-  if (params.recursive_flag) {
-    cerr << "Not implemented yet!\n";
-  } else {
-    for (int ii=0; ii<params.inputs_num; ii++) {
-      path infilename(params.inputs[ii]);
-      path outfilename;
-      //if infilename doesn't match the pattern
-      if (!checkZGBFile(params.inputs[ii], outfilename)) {
-        cerr << "Skipping non-ZGB file " << params.inputs[ii] << "\n";
-        continue;
-      }
-      uncompressFile(infilename, outfilename, params.force_flag);
-    }
+  for (int ii=0; ii<params.inputs_num; ii++) {
+    processPath(params.inputs[ii], true, params);
   }
 
   return 0;
