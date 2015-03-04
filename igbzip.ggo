@@ -12,7 +12,7 @@ places.  They are appropriate when
 
 A ZGB file is NOT appropriate when
 - You need to compute numerical derivatives (dv/dt, gradients, conduction velocity) using this IGB as input.
-- You need numbers larger than 1e12 or smaller than 1e-12
+- You need numbers larger than 1e4 or smaller than 1e-5
 "
 
 args "--unamed-opts"
