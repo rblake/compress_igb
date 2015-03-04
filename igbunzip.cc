@@ -13,7 +13,7 @@
 using namespace std;
 using namespace boost::filesystem;
 
-bool uncompressFile(const path infilename, const path outfilename) {
+bool uncompressFile(const path infilename, const path outfilename, const bool force) {
   bool didEverythingGoOk = false;
   int numWritten, numRead;
 
@@ -33,6 +33,11 @@ bool uncompressFile(const path infilename, const path outfilename) {
     cerr << "Error initializing BZ library for " << infilename.string() << ".\n";
     goto clean_up_infile;
   }
+  if (!force && exists(outfilename)) {
+    cerr << "File " << outfilename << " already exists, not overwriting.  Override with -f\n";
+    goto clean_up_bzfile;
+  }
+
   FILE* outfile;
   outfile = fopen(outfilename.c_str(), "w");
   if (outfile == NULL) {
@@ -84,6 +89,9 @@ bool uncompressFile(const path infilename, const path outfilename) {
   BZ2_bzReadClose(&bzerror, bz_file);
  clean_up_infile:
   fclose(file);
+  if (didEverythingGoOk) {
+    remove(infilename);
+  }
 
   return didEverythingGoOk;
 
@@ -117,23 +125,12 @@ int main (int argc, char* argv[])
     for (int ii=0; ii<params.inputs_num; ii++) {
       path infilename(params.inputs[ii]);
       path outfilename;
-
       //if infilename doesn't match the pattern
       if (!checkZGBFile(params.inputs[ii], outfilename)) {
         cerr << "Skipping non-ZGB file " << params.inputs[ii] << "\n";
         continue;
       }
-
-      // if the output file doesn't exists
-      if (!params.force_flag && exists(outfilename)) {
-        cerr << "File " << outfilename << " already exists, not overwriting.  Override with -f\n";
-        continue;
-      }
-
-      if (uncompressFile(infilename, outfilename)) {
-        //Uncompress was successful.  Delete the source file.
-        remove(infilename);
-      }
+      uncompressFile(infilename, outfilename, params.force_flag);
     }
   }
 
