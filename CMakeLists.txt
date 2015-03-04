@@ -31,3 +31,6 @@ target_link_libraries(igbzip short_float ${Boost_FILESYSTEM_LIBRARY_RELEASE} ${B
 gengetopt_rule(igbunzip.opts igbunzip.ggo)
 add_executable(igbunzip igbunzip.cc igbunzip.opts.c)
 target_link_libraries(igbunzip short_float ${Boost_FILESYSTEM_LIBRARY_RELEASE} ${Boost_SYSTEM_LIBRARY_RELEASE} bz2)
+
+add_executable(testConversion testConversion.cc)
+target_link_libraries(testConversion short_float)
