@@ -13,6 +13,9 @@ function(gengetopt_rule target source)
   )
 endfunction(gengetopt_rule)
 
+find_package(Boost 1.36.0 COMPONENTS filesystem system)
+include_directories(${Boost_INCLUDE_DIRS})
+
 list(APPEND CMAKE_CXX_FLAGS -std=c++11)
 list(APPEND CMAKE_C_FLAGS -std=c99)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
@@ -23,8 +26,8 @@ add_executable(dumpTables dumpTables.cc)
 
 gengetopt_rule(igbzip.opts igbzip.ggo)
 add_executable(igbzip igbzip.cc igbzip.opts.c)
-target_link_libraries(igbzip short_float z bz2)
+target_link_libraries(igbzip short_float ${Boost_FILESYSTEM_LIBRARY_RELEASE} ${Boost_SYSTEM_LIBRARY_RELEASE} z bz2)
 
 gengetopt_rule(igbunzip.opts igbunzip.ggo)
 add_executable(igbunzip igbunzip.cc igbunzip.opts.c)
-target_link_libraries(igbunzip short_float bz2)
+target_link_libraries(igbunzip short_float ${Boost_FILESYSTEM_LIBRARY_RELEASE} ${Boost_SYSTEM_LIBRARY_RELEASE} bz2)
