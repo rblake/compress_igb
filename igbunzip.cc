@@ -13,7 +13,7 @@
 using namespace std;
 using namespace boost::filesystem;
 
-bool uncompressFile(const path infilename, const path outfilename, const bool force) {
+bool uncompressFile(const path infilename, const path outfilename) {
   bool didEverythingGoOk = false;
   int numWritten, numRead;
 
@@ -32,10 +32,6 @@ bool uncompressFile(const path infilename, const path outfilename, const bool fo
   if (bzerror != BZ_OK) {
     cerr << "Error initializing BZ library for " << infilename.string() << ".\n";
     goto clean_up_infile;
-  }
-  if (!force && exists(outfilename)) {
-    cerr << "File " << outfilename << " already exists, not overwriting.  Override with -f\n";
-    goto clean_up_bzfile;
   }
 
   FILE* outfile;
@@ -82,16 +78,10 @@ bool uncompressFile(const path infilename, const path outfilename, const bool fo
  clean_up_outfile:
   fclose(outfile);
   //delete the outfile.
-  if (!didEverythingGoOk) {
-    remove(outfilename);
-  }
  clean_up_bzfile:
   BZ2_bzReadClose(&bzerror, bz_file);
  clean_up_infile:
   fclose(file);
-  if (didEverythingGoOk) {
-    remove(infilename);
-  }
 
   return didEverythingGoOk;
 
@@ -120,7 +110,17 @@ void processPath(const path infilename, const bool warnWrongType, const struct g
       }
       return;
     }
-    uncompressFile(infilename, outfilename, params.force_flag);
+    if (!params.force_flag && exists(outfilename)) {
+      cerr << "File " << outfilename << " already exists, not overwriting.  Override with -f\n";
+      return;
+    }
+    if (uncompressFile(infilename, outfilename)) {
+      if (!params.keep_flag) {
+        remove(infilename);
+      }
+    } else {
+      remove(outfilename);
+    }
   }
 }
 

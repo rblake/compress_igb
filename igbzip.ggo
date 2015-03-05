@@ -23,6 +23,7 @@ args "--unamed-opts"
 
 option "force" f "Overwrite the output file" flag off
 option "recursive" r "Descend recursively into directories" flag off
+option "keep" k "Keep the original file" flag off
 option "round-to-nearest" n "Round all values to nearest multiple of this value.  For example, if 1 \
 is used, all stored values will be integers.  If 0.1 is used, all \
 stored values will be multiples of 0.1.  If 0 is used, the option is \

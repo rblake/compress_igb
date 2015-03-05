@@ -7,3 +7,4 @@ args "--unamed-opts"
 
 option "force" f "Overwrite the output file" flag off
 option "recursive" r "Descend recursively into directories" flag off
+option "keep" k "Keep the original file" flag off

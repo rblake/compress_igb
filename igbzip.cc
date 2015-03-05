@@ -12,7 +12,7 @@
 using namespace std;
 using namespace boost::filesystem;
 
-bool compressFile(const path infilename, const path outfilename, const bool force, const float roundFactor) {
+bool compressFile(const path infilename, const path outfilename, const float roundFactor) {
   bool didEverythingGoOk = false;
   BZFILE* bz_outfile;
   FILE* outfile;
@@ -23,10 +23,6 @@ bool compressFile(const path infilename, const path outfilename, const bool forc
     perror(("Can't open " + infilename.string() + " for reading").c_str());
     return false;
   }  
-  if (!force && exists(outfilename)) {
-    cerr << "File " << outfilename << " already exists, not overwriting.  Override with -f\n";
-    goto clean_up_infile;
-  }
   outfile = fopen(outfilename.string().c_str(), "w");
   if (outfile == NULL) {
     perror(("Can't open " + outfilename.string() + " for writing").c_str());
@@ -106,15 +102,8 @@ bool compressFile(const path infilename, const path outfilename, const bool forc
   }
  clean_up_outfile:
   fclose(outfile);
-  //delete the outfile if things messed up.
-  if (!didEverythingGoOk) {
-    remove(outfilename);
-  }
  clean_up_infile:
   gzclose(file);
-  if (didEverythingGoOk) {
-    remove(infilename);
-  }
 
   return didEverythingGoOk;
 }
@@ -161,7 +150,18 @@ void processPath(const path infilename, const bool warnWrongType, const struct g
       }
       return;
     }
-    compressFile(infilename, outfilename, params.force_flag, roundFactor);
+    if (!params.force_flag && exists(outfilename)) {
+      cerr << "File " << outfilename << " already exists, not overwriting.  Override with -f\n";
+      return;
+    }
+
+    if (compressFile(infilename, outfilename, roundFactor)) {
+      if (!params.keep_flag) {
+        remove(infilename);
+      }
+    } else {
+      remove(outfilename);
+    }
   }
 }
 
