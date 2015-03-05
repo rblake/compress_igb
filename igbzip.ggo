@@ -17,6 +17,25 @@ A ZGB file is NOT appropriate when
   * phie with a 10V/cm shock can easily lead to values in the 
      range of 1e5.
   * Cai output in mM instead of uM can easily be as small as 1e-4
+
+If you want to compress all the files on a head node or your local
+computer while using only 1 CPU, change to the directory and run the
+following:
+
+igbzip -r .
+
+If you want to compress all the files on your local computer as
+quickly as possible, change to the directory and run:
+
+find . -name \\*.igb -o -name \\*.igb.gz -print0 | parallel -0 igbzip {}
+
+If you want to compress all the files using a cluster, use the
+following command in your job script:
+
+DIR=/path/to/my/dir
+find $DIR -name \\*.igb -o -name \\*.igb.gz -print0 \134
+  | parallel -0 -j1 --sshloginfile $PBS_NODEFILE igbzip {}
+
 "
 
 args "--unamed-opts"
