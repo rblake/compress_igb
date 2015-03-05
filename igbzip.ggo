@@ -11,8 +11,12 @@ places.  They are appropriate when
 - You are backing up a study for cold storage
 
 A ZGB file is NOT appropriate when
-- You need to compute numerical derivatives (dv/dt, gradients, conduction velocity) using this IGB as input.
+- You need to compute numerical derivatives (dv/dt, gradients, 
+   conduction velocity) using this IGB as input.
 - You need numbers larger than 1e4 or smaller than 1e-5
+  * phie with a 10V/cm shock can easily lead to values in the 
+     range of 1e5.
+  * Cai output in mM instead of uM can easily be as small as 1e-4
 "
 
 args "--unamed-opts"
